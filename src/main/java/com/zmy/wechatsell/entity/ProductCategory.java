@@ -1,14 +1,18 @@
 package com.zmy.wechatsell.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
-@Entity
+@Entity//把实体映射为数据表
 @Data
+@DynamicUpdate//动态更新 比如：做更新操作的时候，首先是获取该类，如果只更新了类型，数据库的updateTime不会更新，加了这个注解才会更新
+//@Table(name = "product_category")
 public class ProductCategory {
 
     /** 类目id. */
@@ -33,4 +37,5 @@ public class ProductCategory {
         this.categoryName = categoryName;
         this.categoryType = categoryType;
     }
+
 }

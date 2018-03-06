@@ -1,9 +1,32 @@
-用idea新建springboot项目 
+用idea新建springboot项目
+新建spring-start项目，勾选web即可
+新建数据库
+日志，添加依赖lockback
+本机：192.168.1.4
+虚拟机：192.168.1.2
 
-配置applicaiton.yml文件数据库相关信息
+数据库用utf-8mbf：这样可以存表情
 
-配置lomback
+第四章
+买家端开发：Dao层开发——>Service层——>Controller层
+jpa的操作，
+实体类上面的注解操作：
+实体的名字要和表名一样，如果不一样，需要在实体类上加@Table(name = "tbname")
+ProductCategory实体类——dao层——测试
+注意在实体类上加上这个注解@DynamicUpdate//动态更新，如果更新操作时候其实是和原来完全一样的这种不会更新时间
+省略getset方法
+	添加依赖<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	这样打包是可以的了，
+	但是要在idea中跑起来还需要安装插件
 
-新建数据表的实体类
 
-dao层的开发
+Test测试方法上添加@Transactional注解表示此测试方法不会对数据库的数据有影响，完全的回滚，不管有没有异常发生
+
+CategoryService层,写好写测试
+Assert.assertEquals(new Integer(1),productCategory.getCategoryId());，前面一个参数它要求是对象
+
+
+
