@@ -1,0 +1,9 @@
+用idea新建springboot项目 
+
+配置applicaiton.yml文件数据库相关信息
+
+配置lomback
+
+新建数据表的实体类
+
+dao层的开发
