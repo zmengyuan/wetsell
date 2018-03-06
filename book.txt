@@ -7,7 +7,7 @@
 
 数据库用utf-8mbf：这样可以存表情
 
-第四章
+第四章ProductCategory
 买家端开发：Dao层开发——>Service层——>Controller层
 jpa的操作，
 实体类上面的注解操作：
@@ -27,6 +27,21 @@ Test测试方法上添加@Transactional注解表示此测试方法不会对数�
 
 CategoryService层,写好写测试
 Assert.assertEquals(new Integer(1),productCategory.getCategoryId());，前面一个参数它要求是对象
+
+第五章 买家商品ProductInfo
+ProductRepository--Test
+ProductService层，spring自带的Pageable分页接口，传参数时候可以用
+PageRequest request = new PageRequest(0, 2);
+
+BuyerProductController层
+对照接口文档。
+首先定义好返回vo——ResultVO
+
+返回给前端的数据应该遵循前端需要什么返回什么，隐私什么的还是需要注意
+@JsonProperty(value = "name")
+返回给前端的属性的名字
+
+java8新特性
 
 
 
