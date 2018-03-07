@@ -42,6 +42,19 @@ BuyerProductController层
 返回给前端的属性的名字
 
 java8新特性
+lambada表达式对于集合类的操作！
+
+创建ResultVOUtil工具类.
+
+这里有和虚拟机联合，然后联合前后端的操作。
+。。。。。
+
+第六章 买家订单
+OrderMaster实体类和dao层
+OrderDetail实体类和dao层
+
+OrderService
+————keyUtil——时间+随机数=唯一主键
 
 
 

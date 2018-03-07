@@ -30,7 +30,7 @@ public class ProductCategoryRepositoryTest {
     }
 
     @Test
-    @Transactional
+//    @Transactional
     public void saveTest() {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setCategoryName("女生最爱");

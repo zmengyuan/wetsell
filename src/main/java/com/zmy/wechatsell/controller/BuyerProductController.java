@@ -7,6 +7,7 @@ import com.zmy.wechatsell.entity.ProductCategory;
 import com.zmy.wechatsell.entity.ProductInfo;
 import com.zmy.wechatsell.service.CategoryService;
 import com.zmy.wechatsell.service.ProductService;
+import com.zmy.wechatsell.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class BuyerProductController {
         List<Integer> categoryTypeList = productInfoList.stream()
                 .map(e -> e.getCategoryType())
                 .collect(Collectors.toList());
+
         List<ProductCategory> productCategoryList = categoryService.findByCategoryTypeIn(categoryTypeList);
 
         //3、数据拼装
@@ -63,11 +65,6 @@ public class BuyerProductController {
             productVO.setProductInfoVOList(productInfoVOList);
             productVOList.add(productVO);
         }
-
-        ResultVO resultVO = new ResultVO();
-        resultVO.setCode(0);
-        resultVO.setMessage("成功");
-        resultVO.setData(productVOList);
-        return resultVO;
+        return ResultVOUtil.success(productVOList);
     }
 }
