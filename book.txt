@@ -2,8 +2,8 @@
 新建spring-start项目，勾选web即可
 新建数据库
 日志，添加依赖lockback
-本机：192.168.1.4
-虚拟机：192.168.1.2
+本机：192.168.1.6
+虚拟机：192.168.1.5
 
 数据库用utf-8mbf：这样可以存表情
 
@@ -44,17 +44,52 @@ BuyerProductController层
 java8新特性
 lambada表达式对于集合类的操作！
 
+数据库的操作不要写在循环里面
+
 创建ResultVOUtil工具类.
 
 这里有和虚拟机联合，然后联合前后端的操作。
-。。。。。
+访问虚拟机地址：http://192.168.1.5
+前端会跳转到（请在微信客户端打开链接）,这是因为前端做了逻辑判断
+设置一下cookie
+访问这一没有做cookie判断的页：192.168.1.5/#/order
+然后打开开发者工具，applicaiotn中的cookies设置一下cookie
+在console中输入document.cookie='openid=abc'
+然后访问http://192.168.1.5
+访问不到数据：
+修改linux的配置
+vim /usr/local/nginx/conf/nginx.conf
+修改：location/sell/{proxy_pass http://192.168.1.6:8080/sell/
+    server_name:sell.com（因为微信不同意ip访问）}
+    修改了之后要重启：nginx -s reload
+    修改了域名要修改本机的host设置
 
 第六章 买家订单
 OrderMaster实体类和dao层
 OrderDetail实体类和dao层
 
+OrderMaster表其实没有OrderDetail这个字段，可以在字段加上@Transient注解这样实体类对应表不会报错，对应的时候会忽略这个字段。
+但是这样做不好，实体类应该只对应数据库，
+所以新建对象，dto
+单价一定不能由前端传过来！！！
+
+自定义异常类，
+自定义返回码枚举类
+
 OrderService
-————keyUtil——时间+随机数=唯一主键
+————keyUtil——时间+随机数=唯一主键,注意多线程
+
+productService的加减库存方法
+
+BeanUtils.copyProperties()方法即使属性值为空也会拷贝，所以注意先拷贝，再赋值
+
+注意：当两个用户同时对一个商品减库存的时候
+多线程：分别查出来的数据可以减，但是同时其实只有一件，会导致超卖
+后面课程会用到Redis的锁机制
+
+CollectionUtils.isEmpty(orderDetailList)
+page.getContent();获取分页详情
+return new PageImpl<OrderDTO>(orderDTOList, pageable, orderMasterPage.getTotalElements());
 
 
 

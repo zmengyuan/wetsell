@@ -23,11 +23,11 @@ public class OrderDetailRepositoryTest {
     @Test
     public void saveTest() {
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setDetailId("1");
+        orderDetail.setDetailId("2");
         orderDetail.setOrderId("1234567");
         orderDetail.setProductIcon("http://xxxx.jpg");
-        orderDetail.setProductId("123456");
-        orderDetail.setProductName("皮蛋粥");
+        orderDetail.setProductId("123457");
+        orderDetail.setProductName("皮皮虾");
         orderDetail.setProductPrice(new BigDecimal(3.2));
         orderDetail.setProductQuantity(3);
 

@@ -1,5 +1,7 @@
 package com.zmy.wechatsell.service;
 
+import com.zmy.wechatsell.dto.CartDTO;
+import com.zmy.wechatsell.entity.OrderDetail;
 import com.zmy.wechatsell.entity.ProductInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +24,10 @@ public interface ProductService {
     ProductInfo save(ProductInfo productInfo);
 
     //加库存
+    void increaseStock(List<CartDTO> cartDTOList);
 
 
     //减库存
-
+    void decreaseStock(List<CartDTO> cartDTOList);
 
 }
