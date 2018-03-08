@@ -91,5 +91,69 @@ CollectionUtils.isEmpty(orderDetailList)
 page.getContent();获取分页详情
 return new PageImpl<OrderDTO>(orderDTOList, pageable, orderMasterPage.getTotalElements());
 
+买家端api
+OrderForm2OrderDTOConverter类的gson转换
+将String转成List
+orderDetailList = gson.fromJson(orderForm.getItems(),
+                    new TypeToken<List<OrderDetail>>() {
+                    }.getType());
+
+因为前端时间格式要的是秒数
+所以需要处理
+public class Date2LongSerializer  extends JsonSerializer<Date>
+然后就可以在字段上添加注解@JsonSerialize(using = Date2LongSerializer.class)
+
+在类上添加@JsonInclude(JsonInclude.Include.NON_NULL)注解，可以让null字段不返回给前端
+
+全局配置 jackson:
+        default-property-inclusion: non_null
+
+如果需要返回空字符或者空集合，后台可以设置初始值
+List<OrderDetail> orderDetailList = new ArrayList<>()
+
+第七章
+微信授权
+第一个关键点：获取OpenId：手工方式，利用第三方SDK
+微信支付：https://pay.weixin.qq.com/wiki
+调试：https://natapp.cn
+
+
+第三方sck：https://github.com/Wechat-Group/weixin-java-tools
+
+fiddler抓包工具
+微信支付
+微信退款
+
+
+第九层 —— 卖家端
+
+快速布局：www.ibootstrap.cn布局
+
+忽略@JsonIgnore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
