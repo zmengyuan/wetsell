@@ -1,0 +1,313 @@
+新建项目
+	maven 
+		pom
+		4个jar
+	引入springio和springcloud依赖管理，引入maven插件，指定编译版本，引入子模块，这时候其他4个子模块会报错是因为指定1.8，其他几个是1.5版本，这时候更新一下其他几个子模块即可
+	將每個模块的pom文件写好
+
+在demo项目中写springboot启动类DemoApplicaiton将其定为RestController
+启动项目会报错
+Description:
+Cannot determine embedded database driver class for database type NONE
+这是因为依赖了spring-boot-jdbc但没有配置
+在applicaiton.properties里配置数据库连接信息
+
+再次启动
+报错Error creating bean with name 'org.springframework.boot.autoconfigure.session.SessionAutoConfiguration$SessionRepositoryValidator': Invocation of init method failed; nested exception is java.lang.IllegalArgumentException: No Spring Session store is configured: set the 'spring.session.store-type' property
+这是因为在browser里面配置了一个session依赖，先关掉spring.session.store-type=none
+
+再次启动，成功，
+访问8080端口hello会弹出身份验证，这是在spring-boot环境下spring-security默认配置，先关掉security.basic.enabled=false
+
+如何打包发布：maven build...
+clean package
+这样每个项目的target文件夹下就有一个自己的jar包，但是这样是不行的
+demo项目应该是一个web项目，所以需要在demo的pom文件中加入插件，这样在demo文件夹会多一个jar包
+可以用java -jar 这个jar包执行，就相当于启动main函数
+
+
+3-1
+使用springmvc开发restful api
+第一印象：
+1-传统URL描述行为，Restful用URL描述资源
+2-用HTTP方法描述行为，使用HTTP状态码来表示不同的结果
+	GRT查
+	POST增
+	PUT改
+	DELETE删
+3-使用JSON交互数据
+4-RestFul只是一种风格，并不是一种强制的标准
+
+
+3-2
+编写第一个RestFul API
+	编写对RestfulAPI的测试用例 依赖：后期引入测试用例
+	UserControllerTest类whenQuerySuccess方法
+	看上面对测试用例的的注解
+	在sts中添加偏好Favorite，静态导入
+使用注解声明restfulapi
+	@RestController标明此Controller提供restAPI
+	@RequestMapping及其变体。映射HTTP请求
+	@RequestParam映射请求参数
+	Pageable类分页对象，是springdata的对象如果用spring-data可以用这个非常方便，可以使用@PageableDefault默认值
+JSONPATH写法：在GitHub上面找
+
+
+3-3
+编写用户详情服务whenGetInfoSuccess方法
+@PahtVariable：url中的片段作为值，参数中的正则表达式
+post方法的时候请求的时候需要多一个content
+使用正则表达式whenGetInfoFail方法
+@JsonView控制返回json的内容
+	使用接口来声明多个视图：在User类，用户详细视图可以继承简单视图
+	在值对象的get方法指定视图
+	在controller上指定视图
+.andReturn().getResponse().getContentAsString()测试用例中返回json字符串
+
+
+
+
+
+3-4
+处理创建请求
+@RquestBody：请求中请求体
+whenCreateSuccess() 方法
+405请求method后台不支持，比如后台是get，而发是post
+日期类型参数的处理：不要传带格式的，传时间戳，由前台确定展示格式
+@Valid和BindingResult
+	在类中添加了notblank之后，需要在controller加valied注解
+	当有valid注解而没有BindingResult类在Controller时候，有错误的话，程序会返回404
+	当有BindingResult类的时候，程序会执行
+
+3-5
+开发用户信息修改和删除服务
+hibernate validator：所有注解都可以加message字段
+	whenUpdateSuccess()方法LocalDateTime1.8新加的类
+自己写注解验证
+	MyConstraint类
+		@Target({ElementType.METHOD,ElementType.FIELD})
+		@Retention(RetentionPolicy.RUNTIME)
+		@Constraint(validatedBy = MyConstraintValidator.class)
+
+
+3-6
+RESTful API错误处理
+SpringBoot默认错误处理机制（用的getInfo（）方法）：
+	BasicErrorController 根据请求头作出判断：当是浏览器访问时候，返回html，其它情况情况返回json（这种情况会是直接就没有进到方法里，在传入参数那里就直接返回错误了）
+
+自定义错误处理
+	springboot自定义错误处理是基于状态码来处理的，
+	在resources/resources/error文件夹中写状态码.html，这种只对浏览器访问有效，其他平台访问还是返回的json字符串
+
+	新建exception包，新建类，自定义异常类，在controller类中抛出自定义异常类，但是springboot返回的json也只会返回message字段，如果想返回其他信息：新建类ControllerExceptionHandler类@ControllerAdvice注解表示这个类是用来处理Controller类抛出的异常的，本身不处理请求
+	方法handleUserNotExistException（）
+
+
+
+3-7
+RestFulAPI的拦截 记录所有服务处理的时间
+	过滤器：建包filter，建类TimeFilter，必须加@Component，
+	但是实际应用中，我们会用到第三方的过滤器，第三方过滤器是没有@Component的，怎么加到项目中呢？
+		建包config，WebConfig类注解@Configuration，timeFilter()方法，需要加@Bean才可以
+
+	拦截器:新建interceptor包，新建类，拦截器光写@Controller注解是不行的，还需要配置WebConfig extends WebMvcConfigurerAdapter，拦截器会拦截控制器所有的方法调用，不光是自己写的，还有spring自带的controller的方法也会被拦截
+
+
+3-8
+	切片：切入点（注解：在哪些方法起作用，在什么时候起作用），增强（方法：起作用时执行的业务逻辑）要添加依赖，spring-boot-starter-aop
+	新建包aspect，新建类TimeAdpect，添加@Aspect@Component
+
+
+
+过滤器：原始http请求响应，拿不到具体处理的方法信息
+拦截器：上面两个都能拿到，但是拿不到方法真正被调用的时候传进来的参数的值（看sprig源码，DispatcherServlet——doservice方法——dodispatch方法962-971行，）
+切片：能拿到方法的参数的值，但是拿不到原始http请求响应
+执行顺序
+过滤器——拦截器——aspect—controller 
+当controller层方法有异常：反方向并且多一个：过滤器——拦截器——aspect————ControllerAdvice——controller 
+
+
+3-9
+文件上传下载
+
+3-10
+异步处理REST服务
+使用Runnable异步处理Rest服务
+使用DeferredResult异步处理Rest服务
+异步处理配置
+
+tomcat处理的请求是有限制的，所有线程都在使用，所谓异步处理，就是主线程调用副线程，副线程处理好了，由主线程返回，在副线程处理过程中，主线程是可以处理其他请求的
+新建包async新建类AsyncController类
+
+实际情况下常常是消息队列模式新建类MockQueue类
+
+3-11
+与前端并行工作
+使用swagger自动生成文档
+	springfox两个jar包，在启动类中添加注解
+	http://localhost:8080/swagger-ui.html
+使用WireMock快速伪造Restful服务
+	启动服务：命令行
+	 java -jar wiremock-standalone-2.13.0.jar --port
+
+	 然后wiremock包
+
+
+
+4-1
+springsecurity开发基于表单的认证
+springsecurity主要用于：认证/授权/攻击防护
+springsecurity :实现用户名+密码认证
+				实现手机号+短信认证（添加自定义认证方式）
+
+4-2（可以多看几遍）
+引入了springsecurity，springboot默认将所有的服务都保护起来了，访问任何resuful服务，都要进行身份认证
+开始写代码在其他的模块了，DEMO项目只是到时候引用安全模块。
+在browser项目写：
+类BrowserSecurityConfig extends WebSecurityConfigurerAdapter（springsecurity提供的一个适配器类，web应用安全配置的适配器）
+重写configure(HttpSecurity http)方法
+springsecuriy默认自带的登陆页登录
+
+springsecurity基本原理：其实是过滤器链
+过滤器链：
+	SecurityContextPersistenceFilter  请求的时候第一个，检查session里面是否有认证信息SecurityContext，如果有SecurityContext拿出来放到线程里。响应返回的时候最后过它，检查线程是否有SecurityContext，如果有，就放到session里面去
+
+
+
+
+	
+	UsernamePasswordAuthenticationFilter 用户密码 前端访问路径要为login，POST，处理表单登录
+	BasicAuthenticationFilter  springsecurity默认的
+	...
+	以上都是可以通过配置实现是否过滤生效,主要用于用户认证方式
+	以下不能配置不起作用
+	ExceptionTranslationFilter  捕获FilterSecurityInterceptor抛出的异常，并且会根据配置引导用户到响应的界面（比如表单登录，它会到登录页面，比如基本登录，它会弹出登录框）
+	FilterSecurityInterceptor  最终方法的判断 ，决定当前的请求是否能访问后面的服务，就是根据我们的配置进行判断。这里如果不过就会抛出异常
+	RestFul API
+断点模式看程序流程
+	UsernamePasswordAuthenticationFilter看到它只会处理/login post请求
+	ExceptionTranslationFilter 类的dofilter方法很简单，它的主要逻辑是在捕获exception中做了什么
+	在FilterSecurityInterceptor的124行的beforeInvocation方法打断点
+
+
+	访问/user进到FilterSecurityInterceptor的beforeInvocation方法，该方法会判断配置里说所有请求都需要认证，所以抛出异常，ExceptionTranslationFilter类捕获到异常，会重定向到应该到的界面，实现登录/login，这时候会进入UsernamePasswordAuthenticationFilter类，验证通过，又进入FilterSecurityInterceptor的124行的beforeInvocation方法,这次验证通过。
+
+4-3
+自定义用户认证逻辑
+	用户信息获取逻辑/user
+		用户信息获取是在封装到一个接口中的，只有一个方法，返回UserDetails对象，抛出UsernameNotFoundException，校验通过会把用户放到session中
+		新建类MyUserDetailsService实现UserDetailsService接口
+		重写UserDetails loadUserByUsername(String username)方法
+	处理用户校验逻辑
+		UserDetails接口：账号被锁，密码是否过期，账户是否锁定，账户是否冻结，自定义的时候可以自定义类然后继承UserDetails类
+		isAccountNonExpired()账号是否过期，true没有过期
+		isCredentialsNonExpired()密码是否过期
+		isAccountNonLocked()账户是否锁定——+一般用于表示账户是否被冻结
+		isEnabled()账户是否锁定————一般用于用户信息是否被删除了（假删除，用户表一个字段表示）
+	处理密码加密解密
+		org.springframework.security.crypto.password PasswordEncoder接口
+		先要注入spring在config类中注入，在要使用的地方Autowired
+		encode()方法是注册的时候程序员调用的，
+		matches是spring自己调用的，登录过程中拿到返回的UserDetail的password和用户登录输的password
+		要在BrowserSecurityConfig类中配置PasswordEncoder，
+
+4-4
+个性化认证流程
+	自定义登录页面 http.formLogin().loginPage("。。。")
+	自定义登录成功处理 AuthencationSuccessHandler
+	自定义登录失败处理 AuthenticationFailureHandler
+
+
+	自定义登录页面
+		在resources目录新建html,在Config类中定义登录页面，但是会报错误，需要将该登录页面设置为不需要认证与授权！！
+		接着，在imooc-signIn.html设置表单登录，自定义了一个路径，但是也想要UsernamePassword过滤器去处理它,还是在Config类中定义。
+		Could not verify the provided CSRF token because your session was not found.前端出现这个错误，是因为springsecurity提供了一个跨站请求的默认防护，先把这个防御功能关闭
+
+		此时，还有相应的问题：
+		1/发送的restful请求，需要认证，返回的是html，这是不合理的，返回的应该是json，这时我们需要做成，如果访问的是html请求，就返回html，如果不是，就返回json
+		2/写了标准的登录页面，但是我们是要提供可重用的模块，如何让别人的项目自定义自己的页面，不定义的时候，用我们定义的页面
+
+		所以解决方案是：
+			接到html或者数据请求：判断是否需要身份认证——需要——跳转到一个自定义的Controller方法上，在方法内判断是否是html请求引起的跳转，如果是，就返回登录页面，如果不是，就返回401状态码和错误信息
+
+		
+		新建BrowserSecurityController类，由Controller处理url,并且修改Config中处理登录页的请求路径为访问该Controller的映射
+		在该类里面写requireAuthentication方法，如果是html请求，就返回html，如果是其他，就返回json
+		但是要让引用该模块的用户自定义登录页面html，所以在demo项目中的application属性文件中配置imooc.security.browser.loginPage = /demo-signIn.html
+		因为最后要管理这些配置项，所以我们用一个类来封装这些配置项
+		系统配置封装：写在core模块SecurityProperties：包含下面这几个
+						BrowserProperties，
+						ValidateCodeProperties，
+						OAuth2Properties，
+						SocialProperties，
+
+		还有一个SecurityCoreConfig类，这个配置类让SecurityProperties生效
+		common-lang，StringUtils的endsWithIgnoreCase方法
+
+	自定义登录成功处理
+		https://github.com/FasterXML/jackson-databind：jackson类
+		spring自定义的登录成功是一个跳转，但是现在不能这样
+		browser中写imoocAuthenticationSuccessHandler implements AuthenticationSuccessHandler，
+		import org.springframework.security.core.Authentication也是spring中的核心类，封装了认证信息，包括什么IP啊，session啊，认证通过后的用户信息，Authentication会根据登录的方式不同返回不同的信息;
+
+	自定义登录失败处理
+		和成功的方式一样
+
+
+	因为是可重用的模块，所以应该考虑到各种方式，当不是前后端分离的模式的时候，可能spring默认的跳转页面错误处理更适合，所以需要一个配置来说明是要JSON还是html
+	新建枚举类，说明是哪种方式，
+	BrowesrProperties类中新增LoginType属性
+	imoocAuthenticationSuccessHandler中注入SecurityProperties类，然后不实现那个接口了，改为继承一个类SavedRequestAwareAuthenticationSuccessHandler这是spring默认的成功处理器
+
+4-6
+springsrcurity认证源码（后面多看！！！）
+
+	认证处理流程说明：
+	认证结果如何在多个请求之间共享
+	
+	UsernamePasswordAuthenticationFilter（Authentication未认证）——AuthenticationManager——AuthenticationProvider(这里面是真正的校验逻辑，不同的登录方式会有不同的provider，所以getProvider由一个循环，就是循环找这个provider能不能校验此时的登录方式)——UserDetailsService——UserDetail——Authentication（已认证）——SecurityContext——SecurityContextHolder——SecurityContextPersistenceFilter
+
+	获取认证用户信息：在UserController中添加getCurrentUser方法
+
+4-7
+实现图形验证码功能
+	开发生成图形验证码接口
+	在认证流程中加入图形验证码校验
+	重构代码
+
+	开发接口：
+		根据随机数生成图片，将随机数存到session中，将生成的图片写到接口的响应中
+	ImageCode类封装图形验证码信息LocalDateTime类
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7-1
+SpringSecurity授权
+	只区分登录的授权 BrowserSecurityConfig类
+	登录了还需要角色的访问： 用户拥有的的角色是在UserDetailService里面返回用户音系的时候得到的，返回的是一个List<Gran> 要ROLE_ADMIN
+	RESTFUL还需要区分方法，url
+
+7-2
+FilterSecurityInteceptor是决定最后能否访问资源的类
+AnonymousAuthenticationFilter处于绿色过滤器的最后一个
+
+服务请求——FilterSecurityInteceptor——请求信息——AccessDecisionManager接口综合投票者的结果决定到底通过不（Spring默认AffirmativeBased只要一个过就可以）————AccessDecisionVoter。WebExpressionVoter早在spring3之后只会由这个来决定投票过不过
+
+7-3
+权限表达式，都是在antMatchers（url）后面
+多个权限表达式一起用，access
+
+自定义安全配置url 实现接口AuthorizeConfigProvider
+
