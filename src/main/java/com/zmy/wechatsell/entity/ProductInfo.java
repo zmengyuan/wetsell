@@ -1,6 +1,10 @@
 package com.zmy.wechatsell.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zmy.wechatsell.enums.ProductStatusEnum;
+import com.zmy.wechatsell.utils.EnumUtil;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +13,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@DynamicUpdate
 public class ProductInfo {
 
     @Id
@@ -38,4 +43,9 @@ public class ProductInfo {
     private Date createTime;
 
     private Date updateTime;
+
+    @JsonIgnore
+    public ProductStatusEnum getProductStatusEnum() {
+        return EnumUtil.getByCode(productStatus, ProductStatusEnum.class);
+    }
 }
