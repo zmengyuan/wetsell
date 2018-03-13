@@ -8,6 +8,7 @@ spring:
 server:
   context-path: /sell
 
+
 wechat:
   mpAppId: wxd898fcb01713c658
   mpAppSecret: 47ccc303338cee6e62894fxxxxxxxxxxx
@@ -24,3 +25,13 @@ projectUrl:
   wechatMpAuthorize: http://sell.natapp4.cc
   wechatOpenAuthorize: http://sell.natapp4.cc
   sell: http://sell.natapp4.cc
+
+
+#logging:
+#  pattern:
+#    console: "%d - %msg%n"
+##  path: /var/log/tomcat
+#  file: /var/log/tomcat/sell.log
+##还可以设置类的级别
+#  level:
+#    com.imooc.LoggerTest: debug
