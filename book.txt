@@ -115,6 +115,10 @@ List<OrderDetail> orderDetailList = new ArrayList<>()
 微信授权
 第一个关键点：获取OpenId：手工方式，利用第三方SDK
 微信支付：https://pay.weixin.qq.com/wiki——普通商户版，开发文档都要看
+https://mp.weixin.qq.com/wiki
+
+微信支付：https://pay.weixin.qq.com/wiki
+>>>>>>> Stashed changes
 调试：https://natapp.cn
 
 
