@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: pro
   jpa:
     show-sql: true
   jackson:
