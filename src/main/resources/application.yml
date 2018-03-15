@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: pro
+    active: dev
   jpa:
     show-sql: true
   jackson:
@@ -8,23 +8,6 @@ spring:
 server:
   context-path: /sell
 
-
-wechat:
-  mpAppId: wxd898fcb01713c658
-  mpAppSecret: 47ccc303338cee6e62894fxxxxxxxxxxx
-  openAppId: wx6ad144e54af67d87
-  openAppSecret: 91a2ff6d38a2bbccfb7e9f9079108e2e
-  mchId: 1483469312
-  mchKey: 06C56A89949D617xxxxxxxxxxx
-  keyPath: /var/weixin_cert/h5.p12
-  notifyUrl: http://sell.natapp4.cc/sell/pay/notify
-  templateId:
-    orderStatus: e-Cqq67QxD6YNI41iRiqawEYdFavW_7pc7LyEMb-yeQ
-
-projectUrl:
-  wechatMpAuthorize: http://sell.natapp4.cc
-  wechatOpenAuthorize: http://sell.natapp4.cc
-  sell: http://sell.natapp4.cc
 
 
 #logging:
@@ -35,3 +18,7 @@ projectUrl:
 ##还可以设置类的级别
 #  level:
 #    com.imooc.LoggerTest: debug
+
+wechat:
+  mpAppId: wxf82672541effbe0e
+  mpAppSecret: de59f601c4b564fbf7f90dc7f76d6664
