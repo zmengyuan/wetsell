@@ -112,21 +112,28 @@ public class Date2LongSerializer  extends JsonSerializer<Date>
 List<OrderDetail> orderDetailList = new ArrayList<>()
 
 第七章
-微信授权
-第一个关键点：获取OpenId：手工方式，利用第三方SDK
+第一个关键点：
+获取OpenId：手工方式，利用第三方SDK
 微信支付：https://pay.weixin.qq.com/wiki——普通商户版，开发文档都要看
-https://mp.weixin.qq.com/wiki
-
-微信支付：https://pay.weixin.qq.com/wiki
->>>>>>> Stashed changes
+微信公众平台：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1445241432——微信网页开发——微信网页授权
 调试：https://natapp.cn
+二级域名：weichatsell.natapp1.cc
 
+修改appid和redirectId
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf82672541effbe0e&redirect_uri=http://weichatsell.natapp1.cc/sell/weixin/auth&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect
+获取code之后
+https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxf82672541effbe0e&secret=de59f601c4b564fbf7f90dc7f76d6664&code=CODE&grant_type=authorization_code
 
 第三方sck：https://github.com/Wechat-Group/weixin-java-tools
 
 fiddler抓包工具
 微信支付
 微信退款
+
+8-8 测试账号：
+    申请测试账号，配置测试号二维码
+    配置网页账号，就是去买的那个sell.natapp4.cc
+
 
 
 第九层 —— 卖家端
