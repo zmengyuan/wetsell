@@ -119,9 +119,11 @@ List<OrderDetail> orderDetailList = new ArrayList<>()
 调试：https://natapp.cn
 二级域名：weichatsell.natapp1.cc
 
-修改appid和redirectId
+修改appid和redirectId,引导用户打开这个页面
 https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf82672541effbe0e&redirect_uri=http://weichatsell.natapp1.cc/sell/weixin/auth&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect
-获取code之后
+用户点击以上页面之后会返回： redirect_uri/?code=CODE&state=STATE。
+所以会去调用sell/weixin/auth方法，并且可以获取code=CODE&state=STATE。
+获取code之后，请求以下链接获取access_token
 https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxf82672541effbe0e&secret=de59f601c4b564fbf7f90dc7f76d6664&code=CODE&grant_type=authorization_code
 
 第三方sck：https://github.com/Wechat-Group/weixin-java-tools
