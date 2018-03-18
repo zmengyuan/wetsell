@@ -25,6 +25,6 @@ public class WeixinController {
         RestTemplate restTemplate = new RestTemplate();
         //getForObject()方法：发送一个get方法，返回的请求体将映射为一个对象
         String response = restTemplate.getForObject(url, String.class);
-        log.info("response={}", response);
+        log.info("response={}", response);//这里面有openid
     }
 }

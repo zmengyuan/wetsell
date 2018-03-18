@@ -119,6 +119,8 @@ List<OrderDetail> orderDetailList = new ArrayList<>()
 调试：https://natapp.cn
 二级域名：weichatsell.natapp1.cc
 
+
+设置域名
 修改appid和redirectId,引导用户打开这个页面
 https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf82672541effbe0e&redirect_uri=http://weichatsell.natapp1.cc/sell/weixin/auth&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect
 用户点击以上页面之后会返回： redirect_uri/?code=CODE&state=STATE。
@@ -127,10 +129,35 @@ https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf82672541effbe0e&red
 https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxf82672541effbe0e&secret=de59f601c4b564fbf7f90dc7f76d6664&code=CODE&grant_type=authorization_code
 
 第三方sck：https://github.com/Wechat-Group/weixin-java-tools
+https://github.com/Wechat-Group/weixin-java-tools/wiki/MP_OAuth2%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83
 
+微信点击
+http://weichatsell.natapp1.cc/sell/wechat/authorize?returnUrl=www.imooc.com
+
+要去前端项目的获取openid接口配置网址
+cd opt/code/
+再进入文件夹，再进入config, index.js里面修改
+sellUrl:"http://sell.com"
+openIdUrl:"http://weichatsell.natapp1.cc/sell/wechat/authorize"
+wechatPayUrl:
+回到前端项目根目录sell_fe_buyer
+npm run build
+构建好的文件全部再/dist目录
+需要把下面的所有拷贝到网站的根目录cp -r dist/* /opt/data/wwwroot/sell/
+
+访问sell.com
+程序要我们微信访问，但是手机又不能访问
+这时候用代理，通过手机访问的时候先访问电脑，再用电脑访问
+
+charles
 fiddler抓包工具
 微信支付
 微信退款
+
+
+第七章：微信支付
+pom文件
+payController
 
 8-8 测试账号：
     申请测试账号，配置测试号二维码

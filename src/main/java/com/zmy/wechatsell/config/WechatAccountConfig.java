@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * 微信账号相关
+ */
 @Data
 @Component
 @ConfigurationProperties(prefix = "wechat")
