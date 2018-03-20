@@ -1,12 +1,24 @@
 package com.zmy.wechatsell.service.impl;
 
+import com.lly835.bestpay.enums.BestPayTypeEnum;
+import com.lly835.bestpay.model.PayRequest;
+import com.lly835.bestpay.model.PayResponse;
+import com.lly835.bestpay.model.RefundRequest;
+import com.lly835.bestpay.model.RefundResponse;
+import com.lly835.bestpay.service.impl.BestPayServiceImpl;
+import com.lly835.bestpay.utils.JsonUtil;
 import com.zmy.wechatsell.dto.OrderDTO;
 import com.zmy.wechatsell.enums.ResultEnum;
 import com.zmy.wechatsell.exception.SellException;
 import com.zmy.wechatsell.service.OrderService;
 import com.zmy.wechatsell.service.PayService;
+import com.zmy.wechatsell.utils.MathUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
+@Slf4j
 public class PayServiceImpl implements PayService {
 
 
@@ -44,6 +56,7 @@ public class PayServiceImpl implements PayService {
         log.info("【微信支付】异步通知, payResponse={}", JsonUtil.toJson(payResponse));
 
         //查询订单
+
         OrderDTO orderDTO = orderService.findOne(payResponse.getOrderId());
 
         //判断订单是否存在

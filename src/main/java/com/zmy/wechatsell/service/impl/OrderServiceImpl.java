@@ -13,6 +13,7 @@ import com.zmy.wechatsell.exception.SellException;
 import com.zmy.wechatsell.repository.OrderDetailRepository;
 import com.zmy.wechatsell.repository.OrderMasterRepository;
 import com.zmy.wechatsell.service.OrderService;
+import com.zmy.wechatsell.service.PayService;
 import com.zmy.wechatsell.service.ProductService;
 import com.zmy.wechatsell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private PayService payService;
 
     @Override
     @Transactional
@@ -167,7 +171,8 @@ public class OrderServiceImpl implements OrderService {
 
         //如果已支付, 需要退款
         if (orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())) {
-            //TODO
+
+            payService.refund(orderDTO);
         }
 
         return orderDTO;

@@ -21,3 +21,14 @@ server:
 wechat:
   mpAppId: wxf82672541effbe0e
   mpAppSecret: de59f601c4b564fbf7f90dc7f76d6664
+  openAppId:
+  openAppSecret:
+  mchId:
+  mchKey:
+  keyPath:可以放在任意路径
+  notifyUrl:http://weichatsell.natapp1.cc/sell/pay/notify
+
+projectUrl:
+  wechatMpAuthorize: http://weichatsell.natapp1.cc
+  wechatOpenAuthorize: http://weichatsell.natapp1.cc
+  sell: http://weichatsell.natapp1.cc

@@ -1,5 +1,7 @@
 package com.zmy.wechatsell.controller;
 
+import com.lly835.bestpay.model.PayResponse;
+import com.lly835.bestpay.service.BestPayService;
 import com.zmy.wechatsell.dto.OrderDTO;
 import com.zmy.wechatsell.enums.ResultEnum;
 import com.zmy.wechatsell.exception.SellException;
@@ -32,12 +34,12 @@ public class PayController {
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
 
-        //2. 发起支付
         PayResponse payResponse = payService.create(orderDTO);
 
         map.put("payResponse", payResponse);
         map.put("returnUrl", returnUrl);
 
+        //map用于把参数返回前端
         return new ModelAndView("pay/create", map);
     }
 
@@ -52,4 +54,5 @@ public class PayController {
         //返回给微信处理结果
         return new ModelAndView("pay/success");
     }
+
 }

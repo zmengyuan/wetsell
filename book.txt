@@ -155,13 +155,30 @@ fiddler抓包工具
 微信退款
 
 
-第七章：微信支付
+第八章：微信支付
+官方文档：统一下单，
+第三方SCK：www.github.com/
 pom文件
 payController
+payService
+拷贝pay.html到static
+参数要动态，创建create.ftl
+
+修改前端支付代码
+修改index.js的wechatPayUrl
+
+double和double之间的比较也是会出问题的。
+
+下载证书
+配置证书路径，必须让程序又可读
+
+
 
 8-8 测试账号：
     申请测试账号，配置测试号二维码
     配置网页账号，就是去买的那个sell.natapp4.cc
+
+    移步：https://github.com/Pay-Group/best-pay-sdk后续支付
 
 
 
@@ -197,6 +214,8 @@ payController
     从key方式看：一般由sessionId（由cookie来保存和获取）和token（由http头里获取url里保存和获取）
 
 开放平台网站应用登录
+扫码登录：开放平台——网站应用
+open.weixin.qq.com
 
 
 

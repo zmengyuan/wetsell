@@ -1,5 +1,6 @@
 package com.zmy.wechatsell.controller;
 
+import com.zmy.wechatsell.config.ProjectUrlConfig;
 import com.zmy.wechatsell.enums.ResultEnum;
 import com.zmy.wechatsell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,12 @@ public class WechatController {
 
     @Autowired
     private WxMpService wxMpService;
+
+    @Autowired
+    private WxMpService wxOpenService;
+
+    @Autowired
+    private ProjectUrlConfig projectUrlConfig;
 
     @GetMapping(value = "authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
@@ -49,6 +56,34 @@ public class WechatController {
 
         String openId = wxMpOAuth2AccessToken.getOpenId();
         log.info("returnurl={},openid={}",returnUrl,openId);
+
+        return "redirect:" + returnUrl + "?openid=" + openId;
+    }
+
+    /**
+     * 扫码登录
+     * @param returnUrl
+     * @return
+     */
+    @GetMapping("/qrAuthorize")
+    public String qrAuthorize(@RequestParam("returnUrl") String returnUrl) {
+        String url = projectUrlConfig.getWechatOpenAuthorize() + "/sell/wechat/qrUserInfo";
+        String redirectUrl = wxOpenService.buildQrConnectUrl(url, WxConsts.QRCONNECT_SCOPE_SNSAPI_LOGIN, URLEncoder.encode(returnUrl));
+        return "redirect:" + redirectUrl;
+    }
+
+    @GetMapping("/qrUserInfo")
+    public String qrUserInfo(@RequestParam("code") String code,
+                             @RequestParam("state") String returnUrl) {
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
+        try {
+            wxMpOAuth2AccessToken = wxOpenService.oauth2getAccessToken(code);
+        } catch (WxErrorException e) {
+            log.error("【微信网页授权】{}", e);
+            throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getError().getErrorMsg());
+        }
+        log.info("wxMpOAuth2AccessToken={}", wxMpOAuth2AccessToken);
+        String openId = wxMpOAuth2AccessToken.getOpenId();
 
         return "redirect:" + returnUrl + "?openid=" + openId;
     }
