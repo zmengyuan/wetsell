@@ -1,7 +1,9 @@
 package com.zmy.wechatsell.exception;
 
 import com.zmy.wechatsell.enums.ResultEnum;
+import lombok.Getter;
 
+@Getter
 public class SellException extends RuntimeException {
 
     private Integer code;

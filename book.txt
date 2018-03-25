@@ -268,6 +268,72 @@ SellerAuthorizeAspect类
 
     import java.util.concurrent.CopyOnWriteArraySet;
 
+第十三章
+
+全局异常处理
+    银行需要返回异常的时候http码不要200
+
+13-2
+    引入mybatis包1.2.0
+    注解方式，直接用接口上面注解写sql
+    写mapper文件
+    主类设置mappaerScan路径
+    select语句需要加上Results注解
+    传入多个参数需要@Param注解
+        日志：
+            logging:
+              level:
+                com.imooc.dataobject.mapper: trace
+     使用xml方式：需要配置xml扫描文件地址：
+        mybatis:
+          mapper-location: classpath:mapper/*.xml
+
+13-6：压力测试
+    使用工具Apache ab
+    ab -n 100 -c 100 http://www.baidu.com/
+    -n:多少个请求，-c： 多少个并发， -t:多少秒
+
+13-7
+
+    synchronized是一种解决方法，但是无法细粒度控制，而且单线程特别慢。只适合单点的情况！！！
+
+13-8 Redis分布式锁
+    setnx命令
+    getset命令
+
+    加锁
+    解锁
+
+
+十四章：部署
+
+tomcat
+
+java -jar
+
+    mvn clean package -Dmaven.test.skip=true
+    打出来的包在target目录下
+    把jar包放到虚拟机 /opt/javaapps目录
+
+    启动 -D后面就是applicaiton.yml中的配置
+    java -jar sell.jar
+    java -jar -Dserver.port=8090 sell.jar
+    java -jar -Dserver.port=8090 -Dspring.profiles.active=prod sell.jar
+    设置后台启动：
+    nohup java -jar sell.jar > /dev/null 2>&1 &
+
+
+十五章：
+微服务五大神兽：
+    服务发现
+    负载均衡
+    断路器
+    服务网关
+    分布式配置
+    消息总线
+
+    docker+rancher
+
 
 
 
