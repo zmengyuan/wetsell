@@ -197,7 +197,7 @@ double和double之间的比较也是会出问题的。
 
 删除的时候一定记着先判断其他是否在使用
 
-第11章
+第12章
 一、分布式系统
     旨在支持应用程序和服务的开发，可以利用物理架构由多个自治的处理元素，不共享主内存，但通过网络发送消息合作。
 二、三个特点
@@ -213,9 +213,61 @@ double和double之间的比较也是会出问题的。
     理解为key-value的机制，保存和获取
     从key方式看：一般由sessionId（由cookie来保存和获取）和token（由http头里获取url里保存和获取）
 
-开放平台网站应用登录
-扫码登录：开放平台——网站应用
-open.weixin.qq.com
+卖家信息表-dao层——Test
+卖家信息表-service层-Test
+卖家扫码登录：（目的也是获取openid）
+    开放平台——网站应用登录
+    扫码登录：开放平台——网站应用
+        open.weixin.qq.com
+        配置openAppid和opensecretid，添加到WechatAccountConfig类中
+        WechatOpenConfig类
+    WechatController类（”qrAuthorize“）("/qrUserInfo")
+    配置url，ProjectUrl类
+    登录操作：
+        SellerUserController类
+
+操作Redis：
+    下载RedisManager客户端，给大家的虚拟机的redis没有密码
+    添加pom：
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    配置redis
+    redis工具，过期时间一定要设置！！！
+    CookieUtil
+    注意页面跳转尽量不要用相对路径！！！
+
+    登出功能；
+
+AOP实现身份校验
+SellerAuthorizeAspect类
+    获取request：ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+                      HttpServletRequest request = attributes.getRequest();
+
+异常拦截：SellExceptionHandler
+
+12-9消息模板
+    微信公众平台——消息管理——发送消息——模板消息接口——发送模板消息接口
+    使用第三方SDK
+    新建PushMessageService类——Test，需要在微信公众号设置模板id，设置Ip白名单
+    配置模板.
+    消息的异常是catch掉的，因为推送消息不是那么重要，明明订单完成了，结果因为消息异常导致回滚不太合适，所以直接catch了
+
+
+12-10websocket 使用的是html5原生websocket 客户端和服务端都需要写
+
+    order的list.ftl
+    引入pom
+        <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-websocket</artifactId>
+                </dependency>
+    配置WebSocketConfig类
+    WebSocket类：有关很多javax.websocket
+
+    import java.util.concurrent.CopyOnWriteArraySet;
+
 
 
 

@@ -62,6 +62,7 @@ public class SellerUserController {
         //3. 设置token至cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
+//        return new ModelAndView("redirect:/sell/seller/order/list"); 不要用这种方式要用下面这种绝对路径的方式。
         return new ModelAndView("redirect:" + projectUrlConfig.getSell() + "/sell/seller/order/list");
 
     }

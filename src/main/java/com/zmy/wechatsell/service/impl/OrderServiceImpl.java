@@ -12,9 +12,7 @@ import com.zmy.wechatsell.enums.ResultEnum;
 import com.zmy.wechatsell.exception.SellException;
 import com.zmy.wechatsell.repository.OrderDetailRepository;
 import com.zmy.wechatsell.repository.OrderMasterRepository;
-import com.zmy.wechatsell.service.OrderService;
-import com.zmy.wechatsell.service.PayService;
-import com.zmy.wechatsell.service.ProductService;
+import com.zmy.wechatsell.service.*;
 import com.zmy.wechatsell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -47,6 +45,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PayService payService;
+
+    @Autowired
+    private PushMessageService pushMessageService;
+
+    @Autowired
+    private WebSocket webSocket;
 
     @Override
     @Transactional
@@ -106,6 +110,9 @@ public class OrderServiceImpl implements OrderService {
                 ).collect(Collectors.toList());
 
         productService.decreaseStock(cartDTOList);
+
+        //发送消息
+        webSocket.sendMessage(orderDTO.getOrderId());
         return orderDTO;
     }
 
@@ -196,6 +203,9 @@ public class OrderServiceImpl implements OrderService {
             log.error("【完结订单】更新失败, orderMaster={}", orderMaster);
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
+
+        //推送微信模板
+        pushMessageService.orderStatus(orderDTO);
 
 
 
